@@ -7,7 +7,7 @@ import (
 )
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("templates/index.html")
+	t, err := template.ParseFiles("templates/index.html", "templates/header.html", "templates/footer.html")
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
 	}
@@ -17,7 +17,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	fmt.Println("Слушаем порт: 3000")
-
+	http.Handle("/assets", http.StripPrefix("assets", http.FileServer((http.Dir("./assets")))))
 	http.HandleFunc("/", indexHandler)
 
 	http.ListenAndServe(":3000", nil)
