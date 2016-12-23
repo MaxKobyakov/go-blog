@@ -1,30 +1,28 @@
 {{ define "write" }}
-
 {{ template "header" }}
+
 
 <div class="row">
 	<div class="col-xs-4">
 	</div>
 	<div class="col-xs-4">
 		<form role="form" method="POST" action="/SavePost">
-			<input type="hidden" name="id" value="{{.Id}}" />
+			<input type="hidden" name="id"/>
 			<div class="form-group">
-				<label>Title</label>
-				<input type="text" class="form-control" id="title" name="title" value="{{.Title}}"  />
+				<label>Заголовок</label>
+				<input type="text" class="form-control" id="title" name="title"  />
 			</div>
 			<div class="form-group">
-				<label>Content</label>
-				<textarea id="content" name="content">{{.Content}}</textarea>
+				<label>Текст</label>
+				<textarea id="content" name="content"></textarea>
 			</div>
-			<button type="submit" class="btn btn-default">Submit</button>
+			<button type="submit" class="btn btn-default">Отправить</button>
 		</form>
 
 	</div>
 	<div class="col-xs-4">
-		{{ if .Id }}
-			<a href="/delete?id={{.Id}}">Delete</a>
-		{{ end }}
-	</div>
+			<a href="/DeletePost">Удалить</a>
+			</div>
 </div>
 
 {{ template "footer" }}
