@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/rand"
 	"fmt"
 	"github.com/MaxKobyakov/go-blog/models"
 	"html/template"
@@ -30,7 +31,7 @@ func writeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func savePostHandler(w http.ResponseWriter, r *http.Request) {
-	id := r.FormValue("id")
+	id := GenerateId()
 	title := r.FormValue("title")
 	content := r.FormValue("content")
 
@@ -39,6 +40,12 @@ func savePostHandler(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/", 302)
 
+}
+
+func GenerateId() string {
+	b := make([]byte, 16)
+	rand.Read(b)
+	return fmt.Sprintf("%x", b)
 }
 
 func main() {
