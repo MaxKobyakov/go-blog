@@ -38,36 +38,22 @@ func editHandler(rnd render.Render, r *http.Request, params martini.Params) {
 func savePostHandler(rnd render.Render, r *http.Request) {
 	id := r.FormValue("id")
 	title := r.FormValue("title")
-<<<<<<< HEAD
-	contentHtml := r.FormValue("content")
-
-	contentMarkdown := string(blackfriday.MarkdownBasic([]byte(contentHtml)))
-=======
-	content := r.FormValue("content")
->>>>>>> ea53ff83f9f3c861201f592567797b186b11c3d5
+	contentMarkdown := r.FormValue("content")
+	contentHtml := string(blackfriday.MarkdownBasic([]byte(contentMarkdown)))
 
 	var post *models.Post
 	if id != "" {
 		post = posts[id]
 		post.Title = title
-<<<<<<< HEAD
 		post.ContentHtml = contentHtml
 		post.ContentMarkdown = contentMarkdown
 	} else {
 		id = GenerateId()
 		post := models.NewPost(id, title, contentHtml, contentMarkdown)
-=======
-		post.Content = content
-	} else {
-		id = GenerateId()
-		post := models.NewPost(id, title, content)
->>>>>>> ea53ff83f9f3c861201f592567797b186b11c3d5
 		posts[post.Id] = post
-
 	}
 
 	rnd.Redirect("/")
-
 }
 
 func deleteHandler(rnd render.Render, r *http.Request, params martini.Params) {
