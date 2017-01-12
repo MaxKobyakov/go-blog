@@ -1,10 +1,9 @@
-{{ define "write" }}
-{{ template "header" }}
-
-
 <div class="row">
 	<div class="col-xs-4">
-	</div>
+	{{ if .Id }}
+			<a href="/DeletePost/{{.Id}}">Удалить</a>
+			{{ end }}
+			</div>
 	<div class="col-xs-4">
 		<form role="form" method="POST" action="/SavePost">
 			<input type="hidden" name="id" value="{{.Id}}"/>
@@ -20,13 +19,8 @@
 		</form>
 
 	</div>
-	<div class="col-xs-4">
-	{{ if .Id }}
-			<a href="/DeletePost?id={{.Id}}">Удалить</a>
-			{{ end }}
-			</div>
+	<div class="col-xs-4" id="md_html">	</div>
+	
 </div>
 
-{{ template "footer" }}
-
-{{ end }}
+<script type="text/javascript" src="/assets/js/write.js"></script>
