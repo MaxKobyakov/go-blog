@@ -1,4 +1,3 @@
-
 <div class="row">
 	<div class="col-xs-2">
 		{{ if .Id }}
@@ -9,18 +8,20 @@
 		<form role="form" method="POST" action="/SavePost">
 			<input type="hidden" name="id" value="{{.Id}}" />
 			<div class="form-group">
-				<label>Title</label>
+				<label>Заголовок</label>
 				<input type="text" class="form-control" id="title" name="title" value="{{.Title}}"  />
 			</div>
 			<div class="form-group">
-				<label>Content</label>
+				<label>Пост</label>
 				<textarea id="content" name="content">{{.ContentMarkdown}}</textarea>
 			</div>
-			<button type="submit" class="btn btn-default">Отправить</button>
+			<button type="submit" class="btn btn-default">Запостить</button>
 		</form>
 	</div>
+					<label>Предпросмотр</label>
+
 	<div class="col-xs-6" id="md_html">
-		{{.ContentHtml | unescape }}
+		{{ .ContentHtml| unescape }}
 	</div>
 </div>
 

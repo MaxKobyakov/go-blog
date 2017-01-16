@@ -22,7 +22,8 @@ func indexHandler(rnd render.Render) {
 }
 
 func writeHandler(rnd render.Render) {
-	rnd.HTML(200, "write", nil)
+	post := models.Post{}
+	rnd.HTML(200, "write", post)
 }
 
 func editHandler(rnd render.Render, r *http.Request, params martini.Params) {
@@ -56,7 +57,6 @@ func savePostHandler(rnd render.Render, r *http.Request) {
 
 	rnd.Redirect("/")
 }
-
 func deleteHandler(rnd render.Render, r *http.Request, params martini.Params) {
 	id := params["id"]
 	if id == "" {
@@ -105,8 +105,7 @@ func main() {
 		Funcs:      []template.FuncMap{unescapeFuncMap}, // Specify helper function maps for templates to access.
 		Charset:    "UTF-8",                             // Sets encoding for json and html content-types. Default is "UTF-8".
 		IndentJSON: true,                                // Output human readable JSON
-		IndentXML:  true,                                // Output human readable XML
-		//HTMLContentType: "application/xhtml+xml", // Output XHTML content type instead of default "text/html"
+		
 	}))
 
 	staticOption := martini.StaticOptions{Prefix: "assets"}
