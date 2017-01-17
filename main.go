@@ -2,14 +2,14 @@ package main
 
 import (
 	"crypto/rand"
-	"fmt"
+		"labix.org/v2/mgo"
+"fmt"
 	"github.com/MaxKobyakov/go-blog/db/documents"
 	"github.com/MaxKobyakov/go-blog/models"
 	"github.com/codegangsta/martini"
 	"github.com/martini-contrib/render"
 	"github.com/russross/blackfriday"
 	"html/template"
-	"labix.org/v2/mgo"
 	"net/http"
 )
 
@@ -86,6 +86,17 @@ func getHtmlHandler(rnd render.Render, r *http.Request) {
 	rnd.JSON(200, map[string]interface{}{"html": html})
 }
 
+func getLoginHandler(rnd render.Render) {
+rnd.HTML(200, "login", nil)
+}
+func postLoginHandler(rnd render.Render, r *http.Request) {
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+	fmt.Println(username)
+	fmt.Println(password)
+rnd.Redirect("/")
+}
+
 func GenerateId() string {
 	b := make([]byte, 16)
 	rand.Read(b)
@@ -127,6 +138,8 @@ func main() {
 	staticOption := martini.StaticOptions{Prefix: "assets"}
 	m.Use(martini.Static("assets", staticOption))
 	m.Get("/", indexHandler)
+	m.Get("/login", getLoginHandler)
+	m.Post("/login", postLoginHandler)
 	m.Get("/write", writeHandler)
 	m.Get("/edit/:id", editHandler)
 	m.Get("/DeletePost/:id", deleteHandler)
