@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/rand"
 	"fmt"
+	"github.com/MaxKobyakov/go-blog/db/documents"
 	"github.com/MaxKobyakov/go-blog/models"
 	"github.com/codegangsta/martini"
 	"github.com/martini-contrib/render"
@@ -17,7 +18,8 @@ var postsCollection *mgo.Collection
 func indexHandler(rnd render.Render) {
 	postDocuments := []documents.PostDocument{}
 	postsCollection.Find(nil).All(&postDocuments)
-	post := []models.Post{}
+
+	posts := []models.Post{}
 	for _, doc := range postDocuments {
 		post := models.Post{doc.Id, doc.Title, doc.ContentHtml, doc.ContentMarkdown}
 		posts = append(posts, post)
