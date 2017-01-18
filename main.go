@@ -9,7 +9,7 @@ import (
 	"github.com/codegangsta/martini"
 	"github.com/martini-contrib/render"
 	"github.com/russross/blackfriday"
-	"github.com/russross/session"
+	"github.com/MaxKobyakov/go-blog/session"
 	"html/template"
 	"net/http"
 )
