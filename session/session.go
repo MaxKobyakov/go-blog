@@ -16,7 +16,7 @@ return s
 
 func (s *Session) init (username string) string {
 	sessionId := GenerateId()
-	data := &sessionData (Username: username)
+	data := &sessionData {Username: username}
 	s.data[sessionId] = data
 
 	return sessionId
