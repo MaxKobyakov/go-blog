@@ -9,6 +9,7 @@ import (
 	"github.com/codegangsta/martini"
 	"github.com/martini-contrib/render"
 	"github.com/russross/blackfriday"
+	"github.com/russross/session"
 	"html/template"
 	"net/http"
 )
