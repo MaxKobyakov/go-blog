@@ -2,15 +2,15 @@ package main
 
 import (
 	"crypto/rand"
-		"labix.org/v2/mgo"
-"fmt"
+	"fmt"
 	"github.com/MaxKobyakov/go-blog/db/documents"
 	"github.com/MaxKobyakov/go-blog/models"
+	"github.com/MaxKobyakov/go-blog/session"
 	"github.com/codegangsta/martini"
 	"github.com/martini-contrib/render"
 	"github.com/russross/blackfriday"
-	"github.com/MaxKobyakov/go-blog/session"
 	"html/template"
+	"labix.org/v2/mgo"
 	"net/http"
 )
 
@@ -88,14 +88,14 @@ func getHtmlHandler(rnd render.Render, r *http.Request) {
 }
 
 func getLoginHandler(rnd render.Render) {
-rnd.HTML(200, "login", nil)
+	rnd.HTML(200, "login", nil)
 }
 func postLoginHandler(rnd render.Render, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 	fmt.Println(username)
 	fmt.Println(password)
-rnd.Redirect("/")
+	rnd.Redirect("/")
 }
 
 func GenerateId() string {
@@ -147,5 +147,5 @@ func main() {
 	m.Post("/SavePost", savePostHandler)
 	m.Post("/gethtml", getHtmlHandler)
 
-	m.Run()
+	m.RunOnAddr(":3000")
 }
