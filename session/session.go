@@ -1,4 +1,4 @@
-package seasion
+package session
 
 import (
 	"github.com/MaxKobyakov/go-blog/utils"

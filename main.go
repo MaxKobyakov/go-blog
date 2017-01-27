@@ -1,20 +1,25 @@
 package main
 
 import (
-	"crypto/rand"
 	"fmt"
 	"github.com/MaxKobyakov/go-blog/db/documents"
 	"github.com/MaxKobyakov/go-blog/models"
 	"github.com/MaxKobyakov/go-blog/session"
+	"github.com/MaxKobyakov/go-blog/utils"
 	"github.com/codegangsta/martini"
 	"github.com/martini-contrib/render"
-	"github.com/russross/blackfriday"
 	"html/template"
 	"labix.org/v2/mgo"
 	"net/http"
+	"time"
+)
+
+const (
+	COOKIE_NAME = "sessionId"
 )
 
 var postsCollection *mgo.Collection
+var inMemorySession *session.Session
 
 func indexHandler(rnd render.Render) {
 	postDocuments := []documents.PostDocument{}
@@ -53,14 +58,14 @@ func savePostHandler(rnd render.Render, r *http.Request) {
 	id := r.FormValue("id")
 	title := r.FormValue("title")
 	contentMarkdown := r.FormValue("content")
-	contentHtml := ConvertMarkdownToHtml(contentMarkdown)
+	contentHtml := utils.ConvertMarkdownToHtml(contentMarkdown)
 
 	postDocument := documents.PostDocument{id, title, contentHtml, contentMarkdown}
 	if id != "" {
 		postsCollection.UpdateId(id, postDocument)
 
 	} else {
-		id = GenerateId()
+		id = utils.GenerateId()
 		postDocument.Id = id
 		postsCollection.Insert(postDocument)
 	}
@@ -82,7 +87,7 @@ func deleteHandler(rnd render.Render, r *http.Request, params martini.Params) {
 
 func getHtmlHandler(rnd render.Render, r *http.Request) {
 	md := r.FormValue("md")
-	html := ConvertMarkdownToHtml(md)
+	html := utils.ConvertMarkdownToHtml(md)
 
 	rnd.JSON(200, map[string]interface{}{"html": html})
 }
@@ -90,31 +95,29 @@ func getHtmlHandler(rnd render.Render, r *http.Request) {
 func getLoginHandler(rnd render.Render) {
 	rnd.HTML(200, "login", nil)
 }
-func postLoginHandler(rnd render.Render, r *http.Request) {
+func postLoginHandler(rnd render.Render, r *http.Request, w http.ResponseWriter) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 	fmt.Println(username)
 	fmt.Println(password)
-	rnd.Redirect("/")
-}
+	sessionId := inMemorySession.Init(username)
+	cookie := &http.Cookie{
+		Name:    COOKIE_NAME,
+		Value:   sessionId,
+		Expires: time.Now().Add(5 * time.Minute),
+	}
+	http.SetCookie(w, cookie)
 
-func GenerateId() string {
-	b := make([]byte, 16)
-	rand.Read(b)
-	return fmt.Sprintf("%x", b)
+	rnd.Redirect("/")
 }
 
 func unescape(x string) interface{} {
 	return template.HTML(x)
 }
 
-func ConvertMarkdownToHtml(markdown string) string {
-	return string(blackfriday.MarkdownBasic([]byte(markdown)))
-}
-
 func main() {
 	fmt.Println("Слушаем порт: 3000")
-
+	inMemorySession = session.NewSession()
 	session, err := mgo.Dial("localhost")
 	if err != nil {
 		panic(err)
@@ -147,5 +150,5 @@ func main() {
 	m.Post("/SavePost", savePostHandler)
 	m.Post("/gethtml", getHtmlHandler)
 
-	m.RunOnAddr(":3000")
+	m.Run()
 }
