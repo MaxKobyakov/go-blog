@@ -21,7 +21,11 @@ const (
 var postsCollection *mgo.Collection
 var inMemorySession *session.Session
 
-func indexHandler(rnd render.Render) {
+func indexHandler(rnd render.Render, r *http.Request) {
+	cookie, _ := r.Cookie(COOKIE_NAME)
+	if cookie != nil {
+		fmt.Println(inMemorySession.Get(cookie.Value))
+	}
 	postDocuments := []documents.PostDocument{}
 	postsCollection.Find(nil).All(&postDocuments)
 
@@ -100,12 +104,15 @@ func postLoginHandler(rnd render.Render, r *http.Request, w http.ResponseWriter)
 	password := r.FormValue("password")
 	fmt.Println(username)
 	fmt.Println(password)
+
 	sessionId := inMemorySession.Init(username)
+
 	cookie := &http.Cookie{
 		Name:    COOKIE_NAME,
 		Value:   sessionId,
 		Expires: time.Now().Add(5 * time.Minute),
 	}
+
 	http.SetCookie(w, cookie)
 
 	rnd.Redirect("/")

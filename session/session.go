@@ -38,3 +38,12 @@ func (s *Session) Get(sessionId string) string {
 
 	return data.Username
 }
+
+func (s *Session) Get(sessionId string) string {
+	data := s.data[SessionId]
+	if data == nil {
+		return ""
+	}
+	return data.Username
+
+}
