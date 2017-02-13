@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/MaxKobyakov/go-blog/db/documents"
 	"github.com/MaxKobyakov/go-blog/models"
+	"github.com/MaxKobyakov/go-blog/routes"
 	"github.com/MaxKobyakov/go-blog/session"
 	"github.com/MaxKobyakov/go-blog/utils"
 	"github.com/codegangsta/martini"
