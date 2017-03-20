@@ -2,15 +2,19 @@ package routes
 
 import (
 	"github.com/martini-contrib/render"
-	"net/http"
+	"labix.org/v2/mgo"
+	"github.com/MaxKobyakov/go-blog/session"
+	"fmt"
+"github.com/MaxKobyakov/go-blog/db/documents"
+	"github.com/MaxKobyakov/go-blog/models"
+
 )
 
-func indexHandler(rnd render.Render, r *http.Request) {
-	cookie, _ := r.Cookie(COOKIE_NAME)
-	if cookie != nil {
-		fmt.Println(inMemorySession.Get(cookie.Value))
-	}
+func IndexHandler(rnd render.Render, s *session.Session, db *mgo.Database) {
+	fmt.Println(s.Username)
+
 	postDocuments := []documents.PostDocument{}
+	postsCollection := db.C("Posts")
 	postsCollection.Find(nil).All(&postDocuments)
 
 	posts := []models.Post{}
