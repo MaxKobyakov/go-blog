@@ -2,16 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/MaxKobyakov/go-blog/db/documents"
-	"github.com/MaxKobyakov/go-blog/models"
 	"github.com/MaxKobyakov/go-blog/routes"
 	"github.com/MaxKobyakov/go-blog/session"
-	"github.com/MaxKobyakov/go-blog/utils"
 	"github.com/codegangsta/martini"
 	"github.com/martini-contrib/render"
 	"html/template"
 	"labix.org/v2/mgo"
-	"net/http"
 )
 
 func unescape(x string) interface{} {
@@ -20,12 +16,12 @@ func unescape(x string) interface{} {
 
 func main() {
 	fmt.Println("Слушаем порт: 3000")
-	session, err := mgo.Dial("localhost")
+	mongoSession, err := mgo.Dial("localhost")
 	if err != nil {
 		panic(err)
 	}
 
-	db = session.DB("blog")
+	db := mongoSession.DB("blog")
 
 	m := martini.Classic()
 

@@ -2,9 +2,11 @@ package routes
 
 import (
 	"fmt"
-	"github.com/martini-contrib/render"
 	"net/http"
+
 	"github.com/MaxKobyakov/go-blog/session"
+
+	"github.com/martini-contrib/render"
 )
 
 func GetLoginHandler(rnd render.Render) {
@@ -14,8 +16,11 @@ func GetLoginHandler(rnd render.Render) {
 func PostLoginHandler(rnd render.Render, r *http.Request, s *session.Session) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
+
 	fmt.Println(username)
 	fmt.Println(password)
+
 	s.Username = username
+
 	rnd.Redirect("/")
 }

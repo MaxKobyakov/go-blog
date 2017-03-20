@@ -2,9 +2,9 @@ package session
 
 import (
 	"github.com/MaxKobyakov/go-blog/utils"
-	"github.com/codegangsta/martini"
 	"net/http"
 	"time"
+	"github.com/go-martini/martini"
 )
 
 const (

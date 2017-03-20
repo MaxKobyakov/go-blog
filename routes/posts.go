@@ -1,16 +1,16 @@
 package routes
 
 import (
-	"github.com/MaxKobyakov/go-blog/routes"
-	"github.com/MaxKobyakov/go-blog/session"
-	"github.com/MaxKobyakov/go-blog/utils"
-	"github.com/codegangsta/martini"
-	"github.com/martini-contrib/render"
-	"labix.org/v2/mgo"
 	"net/http"
 
 	"github.com/MaxKobyakov/go-blog/db/documents"
 	"github.com/MaxKobyakov/go-blog/models"
+	"github.com/MaxKobyakov/go-blog/utils"
+
+	"github.com/go-martini/martini"
+	"github.com/martini-contrib/render"
+
+	"labix.org/v2/mgo"
 )
 
 func WriteHandler(rnd render.Render) {
@@ -19,11 +19,12 @@ func WriteHandler(rnd render.Render) {
 }
 
 func EditHandler(rnd render.Render, r *http.Request, params martini.Params, db *mgo.Database) {
-	postsCollection := db.C("Posts")
+	postsCollection := db.C("posts")
+
 	id := params["id"]
+
 	postDocument := documents.PostDocument{}
 	err := postsCollection.FindId(id).One(&postDocument)
-
 	if err != nil {
 		rnd.Redirect("/")
 		return
@@ -40,11 +41,10 @@ func SavePostHandler(rnd render.Render, r *http.Request, db *mgo.Database) {
 	contentHtml := utils.ConvertMarkdownToHtml(contentMarkdown)
 
 	postDocument := documents.PostDocument{id, title, contentHtml, contentMarkdown}
-	postsCollection := db.C("Posts")
 
+	postsCollection := db.C("posts")
 	if id != "" {
 		postsCollection.UpdateId(id, postDocument)
-
 	} else {
 		id = utils.GenerateId()
 		postDocument.Id = id
@@ -53,19 +53,18 @@ func SavePostHandler(rnd render.Render, r *http.Request, db *mgo.Database) {
 
 	rnd.Redirect("/")
 }
-func DeleteHandler(rnd render.Render, r *http.Request, params martini.Params, db *mgo.Database) {
 
+func DeleteHandler(rnd render.Render, r *http.Request, params martini.Params, db *mgo.Database) {
 	id := params["id"]
 	if id == "" {
 		rnd.Redirect("/")
 		return
 	}
-	postsCollection := db.C("Posts")
 
+	postsCollection := db.C("posts")
 	postsCollection.RemoveId(id)
 
 	rnd.Redirect("/")
-
 }
 
 func GetHtmlHandler(rnd render.Render, r *http.Request) {
