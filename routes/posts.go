@@ -2,14 +2,11 @@ package routes
 
 import (
 	"net/http"
-
 	"github.com/MaxKobyakov/go-blog/db/documents"
 	"github.com/MaxKobyakov/go-blog/models"
 	"github.com/MaxKobyakov/go-blog/utils"
-
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
-
 	"labix.org/v2/mgo"
 )
 

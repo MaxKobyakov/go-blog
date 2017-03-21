@@ -3,9 +3,7 @@ package session
 import (
 	"net/http"
 	"time"
-
 	"github.com/MaxKobyakov/go-blog/utils"
-
 	"github.com/go-martini/martini"
 )
 

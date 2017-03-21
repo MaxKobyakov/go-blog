@@ -1,15 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"html/template"
-
 	"github.com/MaxKobyakov/go-blog/routes"
 	"github.com/MaxKobyakov/go-blog/session"
-
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
-
+	"html/template"
 	"labix.org/v2/mgo"
 )
 
@@ -53,7 +49,6 @@ func main() {
 	m.Get("/deletePost/:id", routes.DeleteHandler)
 	m.Post("/SavePost", routes.SavePostHandler)
 	m.Post("/gethtml", routes.GetHtmlHandler)
-
 
 	m.RunOnAddr(":80")
 }

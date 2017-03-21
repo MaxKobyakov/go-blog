@@ -2,13 +2,10 @@ package routes
 
 import (
 	"fmt"
-
 	"github.com/MaxKobyakov/go-blog/db/documents"
 	"github.com/MaxKobyakov/go-blog/models"
 	"github.com/MaxKobyakov/go-blog/session"
-
 	"github.com/martini-contrib/render"
-
 	"labix.org/v2/mgo"
 )
 

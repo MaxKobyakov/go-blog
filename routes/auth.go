@@ -3,9 +3,7 @@ package routes
 import (
 	"fmt"
 	"net/http"
-
 	"github.com/MaxKobyakov/go-blog/session"
-
 	"github.com/martini-contrib/render"
 )
 
