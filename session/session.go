@@ -1,9 +1,11 @@
 package session
 
 import (
-	"github.com/MaxKobyakov/go-blog/utils"
 	"net/http"
 	"time"
+
+	"github.com/MaxKobyakov/go-blog/utils"
+
 	"github.com/go-martini/martini"
 )
 
@@ -22,11 +24,10 @@ type SessionStore struct {
 
 func NewSessionStore() *SessionStore {
 	s := new(SessionStore)
-
 	s.data = make(map[string]*Session)
-
 	return s
 }
+
 func (store *SessionStore) Get(sessionId string) *Session {
 	session := store.data[sessionId]
 	if session == nil {
@@ -34,9 +35,11 @@ func (store *SessionStore) Get(sessionId string) *Session {
 	}
 	return session
 }
+
 func (store *SessionStore) Set(session *Session) {
 	store.data[session.id] = session
 }
+
 func ensureCookie(r *http.Request, w http.ResponseWriter) string {
 	cookie, _ := r.Cookie(COOKIE_NAME)
 	if cookie != nil {
@@ -52,7 +55,6 @@ func ensureCookie(r *http.Request, w http.ResponseWriter) string {
 	http.SetCookie(w, cookie)
 
 	return sessionId
-
 }
 
 var sessionStore = NewSessionStore()
@@ -60,7 +62,10 @@ var sessionStore = NewSessionStore()
 func Middleware(ctx martini.Context, r *http.Request, w http.ResponseWriter) {
 	sessionId := ensureCookie(r, w)
 	session := sessionStore.Get(sessionId)
+
 	ctx.Map(session)
+
 	ctx.Next()
+
 	sessionStore.Set(session)
 }

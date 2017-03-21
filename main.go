@@ -2,11 +2,14 @@ package main
 
 import (
 	"fmt"
+	"html/template"
+
 	"github.com/MaxKobyakov/go-blog/routes"
 	"github.com/MaxKobyakov/go-blog/session"
-	"github.com/codegangsta/martini"
+
+	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
-	"html/template"
+
 	"labix.org/v2/mgo"
 )
 
@@ -15,7 +18,6 @@ func unescape(x string) interface{} {
 }
 
 func main() {
-	fmt.Println("Слушаем порт: 3000")
 	mongoSession, err := mgo.Dial("localhost")
 	if err != nil {
 		panic(err)
@@ -26,6 +28,7 @@ func main() {
 	m := martini.Classic()
 
 	unescapeFuncMap := template.FuncMap{"unescape": unescape}
+
 	m.Map(db)
 
 	m.Use(session.Middleware)
@@ -37,19 +40,20 @@ func main() {
 		Funcs:      []template.FuncMap{unescapeFuncMap}, // Specify helper function maps for templates to access.
 		Charset:    "UTF-8",                             // Sets encoding for json and html content-types. Default is "UTF-8".
 		IndentJSON: true,                                // Output human readable JSON
-
 	}))
 
-	staticOption := martini.StaticOptions{Prefix: "assets"}
-	m.Use(martini.Static("assets", staticOption))
+	staticOptions := martini.StaticOptions{Prefix: "assets"}
+	m.Use(martini.Static("assets", staticOptions))
+
 	m.Get("/", routes.IndexHandler)
 	m.Get("/login", routes.GetLoginHandler)
 	m.Post("/login", routes.PostLoginHandler)
 	m.Get("/write", routes.WriteHandler)
 	m.Get("/edit/:id", routes.EditHandler)
-	m.Get("/DeletePost/:id", routes.DeleteHandler)
+	m.Get("/deletePost/:id", routes.DeleteHandler)
 	m.Post("/SavePost", routes.SavePostHandler)
 	m.Post("/gethtml", routes.GetHtmlHandler)
 
-	m.Run()
+
+	m.RunOnAddr(":80")
 }
